@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Health Risk Prediction - Home</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to right, #e0f7fa, #e1bee7);
+      overflow-x: hidden;
+    }
+
+    header {
+      background: #00796b;
+      padding: 20px 50px;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      font-size: 1.8rem;
+    }
+
+    nav a {
+      margin-left: 25px;
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #80deea;
+    }
+
+   
+    .hero-content {
+      max-width: 600px;
+    }
+
+    .hero-content h2 {
+      font-size: 2.5rem;
+      color: #004d40;
+      margin-bottom: 20px;
+    }
+
+    .hero-content p {
+      font-size: 1.1rem;
+      color: #333;
+      margin-bottom: 30px;
+    }
+
+    .hero-content .btn {
+      padding: 12px 30px;
+      background: #00796b;
+      color: white;
+      border: none;
+      border-radius: 30px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .hero-content .btn:hover {
+      background: #004d40;
+    }
+
+    .hero img {
+      width: 400px;
+      animation: float 4s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-20px);
+      }
+    }
+
+    .hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 60px 50px;
+  min-height: 80vh;
+  background: linear-gradient(to right, #74ebd5, #acb6e5);
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.hero-content {
+  max-width: 500px;
+}
+
+.wrapper {
+  width: 650px;
+  height: 420px;
+  background: #fff;
+  display: flex;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+    .form-container {
+      width: 50%;
+      padding: 40px;
+      transition: all 0.5s ease;
+    }
+
+    .form-container h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      font-weight: 500;
+      margin-bottom: 5px;
+      display: block;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      outline: none;
+    }
+
+    .form-group input:focus {
+      border-color: #00796b;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 10px;
+      background: #00796b;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+
+    .btn:hover {
+      background: #004d40;
+    }
+
+    .toggle-panel {
+      width: 50%;
+      background: linear-gradient(135deg, #43cea2, #185a9d);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+      text-align: center;
+      transition: all 0.5s ease;
+    }
+
+    .toggle-panel h2 {
+      margin-bottom: 20px;
+    }
+
+    .toggle-panel p {
+      font-size: 15px;
+      margin-bottom: 30px;
+    }
+
+    .toggle-panel button {
+      padding: 10px 30px;
+      border: 2px solid #fff;
+      background: transparent;
+      color: #fff;
+      border-radius: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .toggle-panel button:hover {
+      background: #fff;
+      color: #185a9d;
+    }
+
+    .wrapper.active .form-container {
+      transform: translateX(100%);
+    }
+
+    .wrapper.active .toggle-panel {
+      transform: translateX(-100%);
+    }
+
+    footer {
+      background: #004d40;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .wrapper {
+        flex-direction: column;
+        width: 90%;
+        height: auto;
+      }
+
+      .form-container, .toggle-panel {
+        width: 100%;
+      }
+    }
+    @media (max-width: 992px) {
+  .hero {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .hero-content {
+    max-width: 100%;
+    margin-bottom: 30px;
+  }
+
+  .wrapper {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .form-container, .toggle-panel {
+    width: 100%;
+  }
+}
+
+
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <h1>🩺 Health Risk Predictor</h1>
+
+  </header>
+
+  <!-- Hero Section -->
+ <section class="hero">
+  <div class="hero-content">
+    <h2>Predict Your Health Risks Effortlessly</h2>
+    <p>
+      Our intelligent system helps you analyze the risk of chronic diseases such as Diabetes, Heart Disease, and more — all in just a few clicks.
+    </p>
+    <button class="btn" onclick="window.location.href='register.html'">Get Started</button>
+  </div>
+
+  <div class="wrapper" id="loginWrapper">
+    <div class="form-container" id="form">
+      <h2 id="formTitle">Login</h2>
+      
+     <form id="authForm" method="POST" action="/login" autocomplete="off">
+  <div class="form-group">
+    <label for="username">Username</label>
+    <input type="text" id="username" name="username" autocomplete="off" required />
+  </div>
+  <div class="form-group">
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password" autocomplete="new-password" required />
+  </div>
+  <button type="submit" class="btn" id="actionBtn">Login</button>
+</form>
+
+    </div>
+    <div class="toggle-panel" id="toggle">
+      <h2 id="toggleTitle">New here?</h2>
+      <p id="toggleText">Register and start predicting your health risks!</p>
+      <button onclick="toggleMode()">Switch to Register</button>
+    </div>
+  </div>
+</section>
+
+
+  <!-- Footer -->
+  <footer>
+    &copy; 2025 Health Risk Prediction System. All rights reserved.
+  </footer>
+
+  <!-- Script -->
+ <script>
+let isLogin = true;
+
+function toggleMode() {
+  const wrapper = document.getElementById("loginWrapper");
+  const formTitle = document.getElementById("formTitle");
+  const actionBtn = document.getElementById("actionBtn");
+  const toggleTitle = document.getElementById("toggleTitle");
+  const toggleText = document.getElementById("toggleText");
+  const authForm = document.getElementById("authForm");
+
+  isLogin = !isLogin;
+
+  formTitle.innerText = isLogin ? "Login" : "Register";
+  actionBtn.innerText = isLogin ? "Login" : "Register";
+  toggleTitle.innerText = isLogin ? "New here?" : "Welcome back!";
+  toggleText.innerText = isLogin
+    ? "Register and start predicting your health risks!"
+    : "Login to continue your health tracking.";
+
+  authForm.setAttribute("action", isLogin ? "/login" : "/register");
+
+  wrapper.classList.toggle("active");
+}
+
+window.onload = () => {
+  const authForm = document.getElementById("authForm");
+  authForm.setAttribute("action", isLogin ? "/login" : "/register");
+};
+
+const params = new URLSearchParams(window.location.search);
+  if (params.get('success') === '1') {
+    const msgDiv = document.getElementById("successMessage");
+    msgDiv.textContent = "Registration successful! Please log in below.";
+    msgDiv.style.display = "block";
+  }
+
+</script>
+
+<div id="successMessage" style="display:none; text-align:center; padding: 10px; margin-top: 20px; color: green; font-weight: bold;"></div>
+
+</body>
+</html>

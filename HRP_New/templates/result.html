@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Prediction Result</title>
+    <style>
+        :root {
+          --bg-light: #f4f9f9;
+          --text-dark: #004d40;
+          --primary-color: #00796b;
+          --primary-dark: #004d40;
+          --input-bg: #ffffff;
+          --border-radius: 10px;
+          --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+          --color-low: #388e3c;       /* green */
+          --color-medium: #f57c00;    /* orange */
+          --color-high: #c62828;      /* red */
+          --tooltip-bg: #333;
+          --tooltip-color: #fff;
+        }
+
+        /* Base styles */
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-light);
+            padding: 20px;
+            text-align: center;
+            color: var(--text-dark);
+            margin: 0;
+        }
+
+        h1 {
+            color: var(--primary-dark);
+            font-weight: 700;
+            margin-bottom: 30px;
+            user-select: none;
+        }
+
+        /* Table styling */
+        .risk-table {
+            margin: 0 auto 30px;
+            border-collapse: collapse;
+            width: 50%;
+            background-color: var(--input-bg);
+            border-radius: var(--border-radius);
+            box-shadow: 0 6px 18px rgba(0, 121, 107, 0.15);
+            overflow: hidden;
+            opacity: 0;
+            animation: fadeSlideUp 0.6s ease forwards;
+            animation-delay: 0.2s;
+        }
+
+        .risk-table th, .risk-table td {
+            border: 1px solid #ddd;
+            padding: 14px 18px;
+            font-size: 16px;
+            position: relative;
+            user-select: none;
+        }
+
+        .risk-table th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            user-select: none;
+        }
+
+        /* Tooltip container */
+        .tooltip {
+            margin-left: 6px;
+            cursor: help;
+            position: relative;
+            display: inline-block;
+            color: #e0f2f1;
+            font-weight: 700;
+        }
+
+        /* Tooltip text */
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 160px;
+            background-color: var(--tooltip-bg);
+            color: var(--tooltip-color);
+            text-align: center;
+            border-radius: 6px;
+            padding: 6px 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%; /* position above */
+            left: 50%;
+            margin-left: -80px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 13px;
+            line-height: 1.3;
+            user-select: text;
+        }
+
+        /* Tooltip arrow */
+        .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%; /* arrow below the tooltip */
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: var(--tooltip-bg) transparent transparent transparent;
+        }
+
+        /* Show tooltip on hover */
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Animated progress bar container */
+        .progress-bar {
+            background-color: #ddd;
+            border-radius: 20px;
+            overflow: hidden;
+            height: 18px;
+            width: 100%;
+            box-shadow: inset 0 1px 3px rgba(255,255,255,0.7);
+            margin-top: 6px;
+            user-select: none;
+        }
+
+        /* Animated progress fill */
+        .progress-fill {
+            height: 100%;
+            width: 0;
+            border-radius: 20px;
+            transition: width 1.2s ease-in-out;
+        }
+
+        /* Risk level colors for progress */
+        .low {
+            background-color: var(--color-low);
+        }
+
+        .medium {
+            background-color: var(--color-medium);
+        }
+
+        .high {
+            background-color: var(--color-high);
+        }
+
+        /* Color-coded rows */
+        .low-risk {
+            background-color: #dcedc8; /* light green */
+        }
+        .medium-risk {
+            background-color: #ffe0b2; /* light orange */
+        }
+        .high-risk {
+            background-color: #ffcdd2; /* light red */
+        }
+
+        /* Hover highlight */
+        .risk-table tbody tr:hover {
+            background-color: #b2dfdb;
+            transform: scale(1.02);
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 121, 107, 0.2);
+            cursor: pointer;
+        }
+
+        /* Highest risk styling */
+        .highest-risk {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--color-high);
+            margin: 25px auto 30px;
+            animation: fadeSlideUp 0.6s ease forwards, pulseGlow 2.5s infinite ease-in-out;
+            animation-delay: 0.8s;
+            opacity: 0;
+            user-select: none;
+        }
+
+        /* Cause and Recovery sections */
+        .section {
+          background: linear-gradient(135deg, #e0f2f1 0%, #ffffff 100%);
+          border-left: 8px solid var(--primary-color);
+          padding: 25px 30px 25px 40px;
+          margin: 30px auto 0;
+          border-radius: var(--border-radius);
+          width: 85%;
+          max-width: 700px;
+          box-shadow: 0 6px 20px rgba(0, 121, 107, 0.2);
+          text-align: left;
+          color: var(--primary-dark);
+          font-size: 16px;
+          line-height: 1.6;
+          position: relative;
+          overflow: hidden;
+          opacity: 0;
+          animation: fadeSlideUp 0.6s ease forwards;
+          animation-delay: 1.2s;
+        }
+
+        .section.cause {
+          animation-delay: 1.2s;
+        }
+        .section.recovery {
+          animation-delay: 1.4s;
+        }
+
+        /* Icons with pseudo-elements */
+        .section.cause::before,
+        .section.recovery::before {
+          content: "";
+          position: absolute;
+          top: 20px;
+          left: 10px;
+          width: 24px;
+          height: 24px;
+          background-size: contain;
+          background-repeat: no-repeat;
+          opacity: 0.4;
+        }
+
+        /* Cause icon: water drop */
+        .section.cause::before {
+          background-image: url('data:image/svg+xml;utf8,<svg fill="%2300796b" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-7.07 17.07l-2.5 2.5 1.41 1.41 2.5-2.5A10 10 0 1 0 12 2z"/></svg>');
+        }
+
+        /* Recovery icon: checkmark */
+        .section.recovery::before {
+          background-image: url('data:image/svg+xml;utf8,<svg fill="%2300796b" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 16.17l-3.88-3.88-1.42 1.42L9 19 20 8l-1.41-1.41z"/></svg>');
+        }
+
+        .section h3 {
+          color: var(--primary-color);
+          font-weight: 700;
+          margin-bottom: 12px;
+          letter-spacing: 0.03em;
+          user-select: none;
+          position: relative;
+          padding-left: 10px;
+        }
+
+        .section p {
+          margin: 0;
+          white-space: pre-wrap;
+          font-size: 15.5px;
+        }
+
+        /* Back button */
+        a.back-button {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 12px 28px;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            font-size: 16px;
+            box-shadow: 0 6px 15px rgba(0, 121, 107, 0.3);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+            user-select: none;
+        }
+
+        a.back-button:hover {
+            background-color: var(--primary-dark);
+            box-shadow: 0 10px 30px rgba(0, 77, 64, 0.8);
+            transform: scale(1.05);
+        }
+
+        /* Animations */
+        @keyframes fadeSlideUp {
+          0% {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes pulseGlow {
+          0%, 100% {
+            text-shadow: 0 0 10px var(--color-high)aa, 0 0 20px var(--color-high)cc;
+          }
+          50% {
+            text-shadow: 0 0 20px var(--color-high)ff, 0 0 30px var(--color-high)ff;
+          }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Predicted Health Risks</h1>
+
+    <table class="risk-table" id="riskTable">
+        <thead>
+          <tr>
+              <th>
+                Risk Category
+                <span class="tooltip">?
+                  <span class="tooltiptext">The category or type of health risk predicted.</span>
+                </span>
+              </th>
+              <th>
+                Predicted Risk (%)
+                <span class="tooltip">?
+                  <span class="tooltiptext">The likelihood of the risk occurring, expressed as a percentage.</span>
+                </span>
+              </th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for key, value in risks.items() %}
+          <tr class="{{ 'low-risk' if value < 40 else ('medium-risk' if value < 70 else 'high-risk') }}">
+              <td>{{ key }}</td>
+              <td>
+                <div>
+                  <strong>{{ value }}%</strong>
+                  {% if key == 'Cardiovascular Risk' %}
+                     <small style="color: gray;">(visual bar scaled down)</small>
+                  {% endif %}
+                  <div class="progress-bar">
+                    <div class="progress-fill
+                        {% if value < 40 %}low{% elif value < 70 %}medium{% else %}high{% endif %}"></div>
+                        
+                  </div>
+                </div>
+              </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="highest-risk">
+        Highest Risk: {{ highest_risk }}
+    </div>
+
+    <div class="section cause" tabindex="0">
+        <h3>Cause of {{ highest_risk }}:</h3>
+        <p>{{ cause_text }}</p>
+    </div>
+
+    <div class="section recovery" tabindex="0">
+        <h3>How to Recover:</h3>
+        <p>{{ recovery_text }}</p>
+    </div>
+
+    <a href="/home" class="back-button">Back to Form</a>
+
+    <script>
+        // Animate progress bars on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            const rows = document.querySelectorAll('#riskTable tbody tr');
+            rows.forEach(row => {
+                const valueCell = row.querySelector('td:nth-child(2) strong');
+                const progressFill = row.querySelector('.progress-fill');
+                if(valueCell && progressFill){
+                    const value = parseFloat(valueCell.textContent);
+                    
+                    // Animate width from 0 to value%
+                    setTimeout(() => {
+                        progressFill.style.width = value + '%';
+                    }, 200);
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

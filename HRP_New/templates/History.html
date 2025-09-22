@@ -1,0 +1,409 @@
+<!-- Save as templates/history.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Health Risk Prediction - History</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root {
+      --bg-light: #f4fdf8;
+      --bg-dark: #1a1a2e;
+      --card-light: white;
+      --card-dark: #2a2a3b;
+      --text-light: #333;
+      --text-dark: #eee;
+      --primary: #009688;
+      --accent: #00796b;
+      --danger: #d32f2f;
+      --danger-hover: #b71c1c;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg-light);
+      color: var(--text-light);
+    }
+
+    .container {
+      display: flex;
+    }
+
+    .sidebar {
+      width: 250px;
+      height: 100vh;
+      background: linear-gradient(145deg, var(--primary), var(--accent));
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 30px;
+      position: fixed;
+      z-index: 100;
+      transition: 0.3s ease;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .profile img {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      margin-bottom: 10px;
+      border: 3px solid white;
+    }
+
+    .profile p {
+      margin: 5px 0;
+      font-size: 1rem;
+    }
+
+    .menu {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      margin-top: 30px;
+      padding: 0 20px;
+    }
+
+    .menu a {
+      text-decoration: none;
+      color: white;
+      font-weight: 500;
+      margin: 12px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      transition: 0.3s ease;
+    }
+
+    .menu a:hover {
+      background-color: rgba(255, 255, 255, 0.15);
+      transform: scale(1.05);
+    }
+
+    .main-content {
+      margin-left: 250px;
+      padding: 40px;
+      flex: 1;
+    }
+
+    .main-content h2 {
+      margin-bottom: 20px;
+      color: var(--primary);
+    }
+
+    .table-container {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 14px 18px;
+      text-align: left;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    thead {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-view {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-right: 6px;
+      transition: 0.3s ease;
+    }
+
+    .btn-view:hover {
+      background: var(--accent);
+    }
+
+    .btn-delete {
+      background: var(--danger);
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .btn-delete:hover {
+      background: var(--danger-hover);
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-content {
+      background: #e0f2f1;
+      margin: 10% auto;
+      padding: 20px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 500px;
+      position: relative;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal h3 {
+      margin-top: 0;
+      color: var(--primary);
+    }
+
+    .close-btn, .confirm-delete-btn {
+      margin-top: 10px;
+      padding: 8px 14px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .close-btn {
+      background: var(--danger);
+      color: white;
+    }
+
+    .confirm-delete-btn {
+      background: var(--primary);
+      color: white;
+      margin-left: 10px;
+    }
+
+    .search-box {
+      margin: 20px 0;
+      max-width: 400px;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 10px 14px;
+      font-size: 1rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      outline: none;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: static;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        padding: 10px 0;
+      }
+
+      .main-content {
+        margin-left: 0;
+        padding: 20px;
+      }
+
+      .menu {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 0;
+      }
+
+      .menu a {
+        margin: 5px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="sidebar">
+    <div class="logo">HealthRisk</div>
+    <div class="profile">
+     <img src="static/uploads/default.png" alt="">
+      <p>Welcome, {{ session['user'] }}</p>
+    </div>
+    <div class="menu">
+      <a href="/profile"><i class="fas fa-user"></i> Profile</a>
+      <a href="/home"><i class="fas fa-stethoscope"></i> Risk Prediction</a>
+      <a href="/history"><i class="fas fa-history"></i> History</a>
+      <a href="/feedback"><i class="fas fa-comments"></i> Feedback</a>
+      <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <h2>Prediction History</h2>
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Search by date, risk, or data...">
+    </div>
+    <div class="table-container">
+      <table id="historyTable">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Input Data</th>
+            <th>Predicted Risks</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in history %}
+          <tr id="row-{{ row.id }}">
+            <td>{{ row.date }}</td>
+            <td>
+              Age: {{ row.input_data['Age'] }},
+              BMI: {{ row.input_data['BMI'] }},
+              BP: {{ row.input_data['Systolic_BP'] }}/{{ row.input_data['Diastolic_BP'] }}
+            </td>
+            <td>
+              {% for key, value in row.risks.items() %}
+                {% if key == row.highest_risk %}
+                  <span style="color:red;"><b>{{ key }}: {{ value }}&#37;</b></span><br>
+                {% else %}
+                  {{ key }}: {{ value }}&#37;<br>
+                {% endif %}
+              {% endfor %}
+            </td>
+            <td>
+              <button class="btn-view" data-row='{{ row | tojson | safe }}' onclick="openModalFromAttr(this)">See All</button>
+              <button class="btn-delete" onclick="confirmDelete('{{ row.id }}')">Delete</button>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- View Details Modal -->
+<div class="modal" id="viewModal">
+  <div class="modal-content">
+    <h3>Prediction Details</h3>
+    <p><strong>Date:</strong> <span id="modal-date"></span></p>
+    <p><strong>Highest Risk:</strong> <span id="modal-risk" style="color:red; font-weight:bold;"></span></p>
+    <p><strong>Risk Scores:</strong></p>
+    <pre id="modal-risks"></pre>
+    <p><strong>Cause:</strong> <span id="modal-cause"></span></p>
+    <p><strong>Recovery:</strong> <span id="modal-recovery"></span></p>
+    <button class="close-btn" onclick="closeModal()">Close</button>
+  </div>
+</div>
+
+<!-- Confirm Delete Modal -->
+<div class="modal" id="deleteModal">
+  <div class="modal-content">
+    <h3>Are you sure you want to delete this history record?</h3>
+    <button class="close-btn" onclick="closeDeleteModal()">Cancel</button>
+    <button class="confirm-delete-btn" id="confirmDeleteBtn">Yes, Delete</button>
+  </div>
+</div>
+
+<script>
+  function openModalFromAttr(btn) {
+    const data = JSON.parse(btn.getAttribute('data-row'));
+    openModal(data);
+  }
+
+  function openModal(data) {
+  document.getElementById("modal-date").innerText = data.date;
+  document.getElementById("modal-risk").innerText = data.highest_risk;
+
+  const causeMap = {
+    "CVD Risk": "Possible causes: High BP, High LDL, Low HDL, Smoking, Obesity, Poor diet, Low physical activity.",
+    "Diabetes Risk": "Possible causes: High BMI, High blood glucose, Family history, Sedentary lifestyle, High sugar intake.",
+    "Obesity Risk": "Possible causes: High BMI, Poor diet, Low activity, Stress, Poor sleep, Family history.",
+    "Respiratory Risk": "Possible causes: Smoking, Air pollution, Chronic cough, Shortness of breath, Family history.",
+    "Mental Health Risk": "Possible causes: High stress, Poor sleep, Anxiety, Mood swings, Family history."
+  };
+
+  const recoveryMap = {
+    "CVD Risk": "How to recover: Quit smoking, Exercise, Balanced diet, Control BP/Cholesterol, Manage stress.",
+    "Diabetes Risk": "How to recover: Weight management, Regular exercise, Balanced diet, Monitor blood sugar, Adequate sleep.",
+    "Obesity Risk": "How to recover: Reduce calorie intake, Increase physical activity, Stress management, Sleep hygiene.",
+    "Respiratory Risk": "How to recover: Quit smoking, Reduce pollution exposure, Breathing exercises, Medical checkup.",
+    "Mental Health Risk": "How to recover: Stress reduction techniques, Mindfulness, Adequate sleep, Social support, Therapy."
+  };
+
+  document.getElementById("modal-cause").innerText = causeMap[data.highest_risk];
+  document.getElementById("modal-recovery").innerText = recoveryMap[data.highest_risk];
+
+  let riskStr = "";
+  for (const [key, val] of Object.entries(data.risks)) {
+    riskStr += key + ": " + val + "%\n";
+  }
+  document.getElementById("modal-risks").innerText = riskStr;
+
+  document.getElementById("viewModal").style.display = "block";
+}
+
+  function closeModal() {
+    document.getElementById("viewModal").style.display = "none";
+  }
+
+  function confirmDelete(id) {
+    document.getElementById("deleteModal").style.display = "block";
+    document.getElementById("confirmDeleteBtn").onclick = function () {
+      fetch(`/delete-history/${id}`, {
+        method: 'DELETE'
+      }).then(res => {
+        if (res.ok) {
+          document.getElementById(`row-${id}`).remove();
+        }
+        closeDeleteModal();
+      });
+    };
+  }
+
+  function closeDeleteModal() {
+    document.getElementById("deleteModal").style.display = "none";
+  }
+
+  window.onclick = function (event) {
+    if (event.target.classList.contains('modal')) {
+      closeModal();
+      closeDeleteModal();
+    }
+  };
+
+  document.getElementById("searchInput").addEventListener("keyup", function () {
+    const filter = this.value.toLowerCase();
+    const rows = document.querySelectorAll("#historyTable tbody tr");
+    rows.forEach(row => {
+      row.style.display = row.innerText.toLowerCase().includes(filter) ? "" : "none";
+    });
+  });
+</script>
+</body>
+</html>
